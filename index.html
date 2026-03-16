@@ -3,96 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GMod 載入畫面</title>
+    <title>Hanahime躲貓貓伺服器</title>
     <style>
-        /* 基礎全螢幕與背景設定 */
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #111;
-            /* 👇 這裡的 bg.jpg 換成你的圖片檔名 */
             background-image: url('bg.png'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             font-family: "微軟正黑體", "Microsoft JhengHei", Arial, sans-serif;
-            overflow: hidden; /* 防止滾動條 */
-            color: white;
+            overflow: hidden; color: white;
         }
 
-        /* 黑色漸層遮罩，讓文字更清楚 */
         .overlay {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 60px;
-            box-sizing: border-box;
+            width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 50px 80px; box-sizing: border-box;
         }
 
-        /* 標題與文字排版 */
-        h1 {
-            font-size: 4em;
-            margin: 0 0 10px 0;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
-            letter-spacing: 2px;
-        }
-
-        h2 {
-            font-size: 1.8em;
-            font-weight: normal;
-            margin: 0 0 20px 0;
-            color: #ccc;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-        }
+        h1 { font-size: 3.5em; margin: 0 0 5px 0; text-shadow: 2px 2px 5px rgba(0,0,0,0.9); letter-spacing: 2px; }
+        h2 { font-size: 1.5em; font-weight: normal; margin: 0 0 25px 0; color: #ddd; text-shadow: 1px 1px 3px rgba(0,0,0,0.9); }
 
         .info-box {
-            font-size: 1.2em;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 30px;
             border-left: 5px solid #00ffcc;
-            display: inline-block;
-            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 600px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
 
-        /* 閃爍的載入文字動畫 */
-        .loading-text {
-            color: #00ffcc;
-            font-weight: bold;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
+        .status-text { color: #00ffcc; font-size: 1.3em; font-weight: bold; }
+        .file-text { color: #ffaa00; font-size: 1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .progress-text { color: #fff; font-size: 1.1em; }
     </style>
 </head>
 <body>
 
     <div class="overlay">
-        <h1>Hanahime躲貓貓伺服器</h1>
-        
-        <h2>準備進入地圖： <span id="map-name" style="color: #ffaa00;">載入中...</span></h2>
+        <h1>Hanahime 躲貓貓伺服器</h1>
+        <h2>正在前往地圖： <span id="map-name" style="color: #ffaa00;">讀取中...</span></h2>
 
         <div class="info-box">
-            <div class="loading-text">正在下載伺服器資源與工作坊...</div>
-            <div style="margin-top: 5px; font-size: 0.9em; color: #aaa;">請稍候，第一次進房會需要較多時間下載檔案。</div>
+            <div id="loading-status" class="status-text">連線中，請稍候...</div>
+            <div id="download-file" class="file-text">準備下載資源...</div>
+            <div id="progress-text" class="progress-text"></div>
         </div>
     </div>
 
     <script>
-        // GMod 會自動在網址後面加上 ?mapname=xxx 的參數，我們用 JS 把它抓出來顯示
+        // 1. 抓取網址傳來的地圖名稱 (給那些 GMod 沒呼叫 GameDetails 的情況備用)
         const urlParams = new URLSearchParams(window.location.search);
-        const mapName = urlParams.get('mapname');
-        
-        if (mapName) {
-            document.getElementById('map-name').innerText = mapName;
+        const mapNameParam = urlParams.get('mapname');
+        if (mapNameParam) {
+            document.getElementById('map-name').innerText = mapNameParam;
+        }
+
+        // --- 以下為 GMod 引擎會自動呼叫的內建 JavaScript 函式 ---
+
+        let filesTotal = 0;
+        let filesNeeded = 0;
+
+        // 取得伺服器詳細資訊
+        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+            document.getElementById('map-name').innerText = mapname;
+        }
+
+        // 狀態改變 (例如：Sending client info, Retrieving server info)
+        function SetStatusChanged(status) {
+            document.getElementById('loading-status').innerText = status;
+        }
+
+        // 正在下載的檔案名稱
+        function DownloadingFile(fileName) {
+            document.getElementById('download-file').innerText = "下載檔案: " + fileName;
+        }
+
+        // 設定總共需要下載的檔案數量
+        function SetFilesTotal(total) {
+            filesTotal = total;
+        }
+
+        // 設定目前剩餘需要下載的檔案數量，並計算進度
+        function SetFilesNeeded(needed) {
+            filesNeeded = needed;
+            if (filesTotal > 0) {
+                let downloaded = filesTotal - filesNeeded;
+                let percentage = Math.round((downloaded / filesTotal) * 100);
+                document.getElementById('progress-text').innerText = "總進度: " + percentage + "% (" + downloaded + " / " + filesTotal + ")";
+            }
         }
     </script>
 
