@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>躲貓貓 - 玩法介紹</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            font-family: "微軟正黑體", "Microsoft JhengHei", Arial, sans-serif;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #16213e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            border-top: 5px solid #0f3460;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e94560;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #0f3460;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            color: #00ffcc;
+            font-size: 1.5em;
+            border-bottom: 2px solid #e94560;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .hunter-title { color: #ff4a4a; border-color: #ff4a4a; }
+
+        .keybind {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .key {
+            background: #e94560;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 30px;
+            text-align: center;
+            box-shadow: 0 4px 0 #b33045;
+        }
+
+        .key-desc {
+            flex: 1;
+        }
+        
+        .highlight { color: #00ffcc; font-weight: bold; }
+        .danger { color: #ff4a4a; font-weight: bold; }
+
+        ul { padding-left: 20px; margin-top: 5px; }
+        li { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Hanahimeのゲーセン</h1>
+    <div class="subtitle">歡迎來到本伺服器！請先閱讀以下的專屬技能與快捷鍵介紹</div>
+
+    <div class="section">
+        <div class="section-title">📦 偽裝者 (Props) 專屬技能與操作</div>
+        
+        <div class="keybind">
+            <div class="key">E</div>
+            <div class="key-desc">對準物品按下可變身。每回合 <span class="danger">限制變身 2 次</span>。</div>
+        </div>
+
+        <div class="keybind">
+            <div class="key">右鍵</div>
+            <div class="key-desc"><strong>鎖定視角：</strong> 將物品角度與位置固定，讓你自由轉動視角觀察四周而不穿幫。</div>
+        </div>
+
+        <div class="keybind">
+            <div class="key">B</div>
+            <div class="key-desc"><strong>綠色預覽開關：</strong> 切換是否顯示「貼牆時的綠色對齊虛影」。</div>
+        </div>
+
+        <div class="keybind">
+            <div class="key">V</div>
+            <div class="key-desc"><strong>完美貼牆：</strong> 對準牆壁按下，物品會自動完美吸附並貼齊牆面 (需消耗轉身次數，變身可重置)。</div>
+        </div>
+
+        <div class="keybind">
+            <div class="key">N</div>
+            <div class="key-desc"><strong>卡住復原：</strong> 貼牆後如果卡住，按下 N 可安全彈回貼牆前的位置。每回合 <span class="danger">限用 2 次</span> (變身可重置)。</div>
+        </div>
+
+        <div class="keybind">
+            <div class="key">R</div>
+            <div class="key-desc"><strong>原地旋轉：</strong> 自動鎖定並將物品原地旋轉 90 度。</div>
+        </div>
+
+        <div class="keybind">
+            <div class="key">C</div>
+            <div class="key-desc"><strong>防護煙霧彈：</strong> 原地釋放煙霧。施放者本人進入煙霧可獲得無敵，獵人進入則會 <span class="danger">每秒受到 20 點毒氣傷害</span>。</div>
+        </div>
+
+        <div class="keybind">
+            <div class="key">F</div>
+            <div class="key-desc"><strong>智慧閃光彈：</strong> 釋放閃光彈，直視該區域的獵人將被短暫致盲。</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title hunter-title">🔫 獵人 (Hunters) 專屬技能</div>
+        
+        <div class="keybind">
+            <div class="key" style="background: #ff4a4a; box-shadow: 0 4px 0 #cc0000;">G</div>
+            <div class="key-desc">
+                <strong>定身震撼波：</strong> 消耗 2 點技能點數，釋放大範圍震撼波，範圍內的偽裝者將被 <span class="highlight">強制限制移動 2 秒</span>。
+                <ul>
+                    <li>每存活 3 分鐘可自動獲得 1 點技能點數 (上限 10 點)。</li>
+                    <li>亂開槍打錯物品會扣血，血量歸零將會死亡！</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" style="background: #2a1b3d;">
+        <div class="section-title" style="color: #fca311; border-color: #fca311;">⚡ 伺服器特殊事件</div>
+        <ul>
+            <li><span class="highlight">跨時空猜拳：</span> 回合開始後經過 <strong>1分30秒</strong>，系統將隨機抽一名獵人與偽裝者進行猜拳對決！勝者獲得強化與道具，敗方陣營將面臨「全體強制隨機變身」等嚴厲懲罰！若逾時未出拳將直接判定棄權並受罰。</li>
+            <li><span class="highlight">最後 60 秒大暴走：</span> 回合剩下最後 60 秒時，場上所有活著的偽裝者將被系統 <span class="danger">強制隨機變身</span>，趕快逃命吧！</li>
+        </ul>
+    </div>
+    
+    <div style="text-align: center; color: #888; font-size: 0.9em;">
+        點擊右下角按鈕或按下 ESC 關閉此視窗進入遊戲。
+    </div>
+</div>
+
+</body>
+</html>
