@@ -40,9 +40,40 @@
         .status-text { color: #00ffcc; font-size: 1.3em; font-weight: bold; }
         .file-text { color: #ffaa00; font-size: 1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .progress-text { color: #fff; font-size: 1.1em; }
+
+        /* === 新增：右上角 LOGO 與旋轉動畫樣式 === */
+        .logo-container {
+            position: fixed;   /* 絕對固定在畫面上 */
+            top: 40px;         /* 距離頂部 40px */
+            right: 50px;       /* 距離右側 50px */
+            z-index: 9999;     /* 確保不會被背景或其他東西遮住 */
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.9)); /* 增加黑色立體陰影 */
+        }
+
+        .spinning-logo {
+            width: 120px;       /* LOGO 的寬度 */
+            height: 120px;      /* LOGO 的高度 */
+            border-radius: 50%; /* 將 JPG 方形強制裁切成完美的圓形 */
+            object-fit: cover;  /* 確保圖片比例正常不變形 */
+            border: 3px solid rgba(0, 255, 204, 0.6); /* 加上與左下角 UI 搭配的青色光環邊框 */
+            
+            /* 啟動動畫：名稱為 slowSpin，轉一圈耗時 4 秒，勻速(linear)，無限循環(infinite) */
+            animation: slowSpin 4s linear infinite; 
+        }
+
+        /* 定義旋轉的動畫關鍵幀 */
+        @keyframes slowSpin {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* ========================================= */
     </style>
 </head>
 <body>
+
+    <div class="logo-container">
+        <img src="logo.png" alt="Server Logo" class="spinning-logo">
+    </div>
 
     <div class="overlay">
         <h1>Hanahimeのゲーセン</h1>
