@@ -15,101 +15,119 @@
             overflow: hidden;
             font-family: "微軟正黑體", sans-serif;
             
-            /* 新增：讓背景圖片切換時有 1.5 秒的平滑淡入淡出效果 */
+            /* 保留：背景圖片切換時有平滑淡入淡出效果 */
             transition: background-image 1.5s ease-in-out;
         }
 
+        /* 透明遮罩，用來排版頂部和底部資訊 */
         .overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6); 
+            background: rgba(0, 0, 0, 0.3); /* 調亮透明度，更突出背景 */
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            justify-content: space-between; /* 頂部放標題和LOGO，底部放資訊框 */
+            padding: 30px;
+            box-sizing: border-box;
         }
 
+        /* 頂部排版 (標題左，Logo右) */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* === 修正：改回靠上對齊，這樣標題就不會被大 LOGO 拉低 === */
+        }
+
+        /* 標題裝上粉紅色發光外框 */
+        .server-title {
+            color: #fff;
+            font-size: 2.2em; /* 稍微放大字體配合外框 */
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 0 0 10px #ff69b4;
+            
+            /* 粉紅色外框樣式 */
+            background: rgba(20, 20, 40, 0.85); /* 稍微帶深藍的黑色背景 */
+            padding: 15px 30px; /* 框內間距 */
+            border-radius: 12px; /* 圓角 */
+            border: 2px solid #ff69b4; /* 粉紅色實線邊框 */
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.6); /* 外發光效果 */
+            
+            display: inline-block; /* 讓框的大小隨內容縮放 */
+            max-width: 60%; /* 限制標題外框寬度 */
+            word-wrap: break-word; /* 內容太長自動換行 */
+            flex-shrink: 0; /* 防止被擠壓 */
+        }
+
+        /* Logo 調整大小中間值 (300px) 並加回縮放效果 */
         .logo {
-            max-width: 400px;
-            margin-bottom: 30px;
-            filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.8));
+            max-width: 250px;
+            margin: 0;
+            object-fit: contain;
+            flex-shrink: 0; /* 防止被擠壓 */
+            border-radius: 8px;
+            
+            /* 加回縮放動畫效果 */
             animation: pulse 2s infinite alternate;
         }
 
+        /* Logo 縮放動畫定義 */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.6)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.8)); }
         }
 
-        .loading-box {
-            background: rgba(20, 20, 40, 0.85);
-            padding: 30px 50px;
-            border-radius: 15px;
-            border: 2px solid #ff69b4;
-            box-shadow: 0 0 30px rgba(255, 105, 180, 0.5);
-            text-align: center;
-            width: 60%;
-            max-width: 800px;
+        /* 底部排版 (靠左下) */
+        .footer-bar {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
         }
 
-        .server-title {
-            color: #fff;
-            font-size: 2.5em;
-            font-weight: bold;
-            margin: 0 0 10px 0;
-            text-shadow: 0 0 10px #ff69b4;
+        /* 保留：你提供的左下角半透明資訊框樣式 (左側綠色邊框) */
+        .info-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 30px;
+            border-left: 5px solid #00ffcc;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 600px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            margin: 0;
         }
 
+        /* 資訊框內文字樣式 */
         .status-text {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .file-text {
             color: #00ffcc;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-
-        /* 檔案下載進度條 */
-        .progress-container {
-            width: 100%;
-            background-color: #222;
-            border-radius: 10px;
-            border: 1px solid #555;
-            overflow: hidden;
-            height: 25px;
-            margin-bottom: 15px;
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff69b4, #ff1493);
-            transition: width 0.2s;
-            box-shadow: 0 0 15px #ff69b4;
-        }
-
-        /* 當前下載檔案名稱 */
-        .file-name {
-            color: #aaa;
             font-size: 1.1em;
-            height: 25px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+        }
+        .progress-text {
+            color: #aaa;
+            font-size: 1em;
         }
     </style>
 </head>
 <body>
 
     <div class="overlay">
-        <img src="logo.png" alt="Server Logo" class="logo" onerror="this.style.display='none'">
+        <div class="header-bar">
+            <h1 class="server-title">Hanahimeのゲーセン</h1>
+            
+            <img src="logo.png" alt="Server Logo" class="logo" onerror="this.style.display='none'">
+        </div>
         
-        <div class="loading-box">
-            <h1 class="server-title">⚡ Hanahime 伺服器 ⚡</h1>
-            <div class="status-text" id="status-text">正在連接伺服器...</div>
-            
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar"></div>
+        <div class="footer-bar">
+            <div class="info-box">
+                <div id="loading-status" class="status-text">連線中，請稍候...</div>
+                <div id="download-file" class="file-text">準備下載資源...</div>
+                <div id="progress-text" class="progress-text"></div>
             </div>
-            
-            <div class="file-name" id="file-name">準備載入遊戲資源...</div>
         </div>
     </div>
 
@@ -119,7 +137,7 @@
             'bg2.png', 'bg3.png', 'bg4.png', 'bg5.png'
         ];
         
-        // 1. 預先載入所有圖片，防止切換時出現短暫黑畫面
+        // 1. 預先載入所有圖片
         backgrounds.forEach(src => {
             const img = new Image();
             img.src = src;
@@ -127,7 +145,7 @@
 
         let currentBgIndex = -1;
 
-        // 2. 隨機切換背景的函數 (防呆：確保不會連續抽到同一張圖)
+        // 2. 隨機切換背景的函數
         function changeBackground() {
             let newIndex;
             do {
@@ -141,33 +159,35 @@
         // 3. 初始載入第一張
         changeBackground();
 
-        // 4. 每隔 6 秒 (6000 毫秒) 自動執行一次切換
-        setInterval(changeBackground, 6000);
+        // 4. 每隔 6 秒 自動切換一張
+        setInterval(changeBackground, 5000);
 
 
         // === GMod 讀取畫面專用函數 ===
         
-        // 更新總進度與狀態文字
         function SetStatusChanged(status) {
-            document.getElementById('status-text').innerText = status;
+            document.getElementById('loading-status').innerText = status;
         }
 
-        // 正在下載的檔案名稱
         function DownloadingFile(fileName) {
-            document.getElementById('file-name').innerText = "正在下載: " + fileName;
+            document.getElementById('download-file').innerText = "正在下載: " + fileName;
         }
 
-        // 更新進度條 (GMod 傳入的是下載的檔案數量與總數)
         function SetFilesNeeded(needed) {
-            // 需要下載的總數
-            window.totalFiles = needed;
+            window.totalFilesInitial = needed;
+            updateProgressText(window.filesDownloaded || 0, window.totalFilesInitial);
         }
 
         function SetFilesTotal(total) {
-            if(window.totalFiles > 0) {
-                let downloaded = window.totalFiles - total;
-                let percent = (downloaded / window.totalFiles) * 100;
-                document.getElementById('progress-bar').style.width = percent + "%";
+            if(window.totalFilesInitial > 0) {
+                window.filesDownloaded = window.totalFilesInitial - total; 
+                updateProgressText(window.filesDownloaded, window.totalFilesInitial);
+            }
+        }
+
+        function updateProgressText(downloaded, total) {
+            if(total > 0) {
+                document.getElementById('progress-text').innerText = "已下載: " + downloaded + " / " + total + " 檔案";
             }
         }
     </script>
