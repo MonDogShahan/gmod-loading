@@ -2,133 +2,174 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hanahimeのゲーセン</title>
+    <title>讀取畫面</title>
     <style>
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #111;
-            background-image: url('bg.png'); 
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
             background-repeat: no-repeat;
-            font-family: "微軟正黑體", "Microsoft JhengHei", Arial, sans-serif;
-            overflow: hidden; color: white;
+            overflow: hidden;
+            font-family: "微軟正黑體", sans-serif;
+            
+            /* 新增：讓背景圖片切換時有 1.5 秒的平滑淡入淡出效果 */
+            transition: background-image 1.5s ease-in-out;
         }
 
         .overlay {
-            width: 100%; height: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
-            display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 50px 80px; box-sizing: border-box;
-        }
-
-        h1 { font-size: 3.5em; margin: 0 0 5px 0; text-shadow: 2px 2px 5px rgba(0,0,0,0.9); letter-spacing: 2px; }
-        h2 { font-size: 1.5em; font-weight: normal; margin: 0 0 25px 0; color: #ddd; text-shadow: 1px 1px 3px rgba(0,0,0,0.9); }
-
-        .info-box {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px 30px;
-            border-left: 5px solid #00ffcc;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); 
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-width: 600px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
         }
 
-        .status-text { color: #00ffcc; font-size: 1.3em; font-weight: bold; }
-        .file-text { color: #ffaa00; font-size: 1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .progress-text { color: #fff; font-size: 1.1em; }
-
-        /* === 新增：右上角 LOGO 與旋轉動畫樣式 === */
-        .logo-container {
-            position: fixed;   /* 絕對固定在畫面上 */
-            top: 40px;         /* 距離頂部 40px */
-            right: 50px;       /* 距離右側 50px */
-            z-index: 9999;     /* 確保不會被背景或其他東西遮住 */
-            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.9)); /* 增加黑色立體陰影 */
+        .logo {
+            max-width: 400px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.8));
+            animation: pulse 2s infinite alternate;
         }
 
-        .spinning-logo {
-            width: 120px;       /* LOGO 的寬度 */
-            height: 120px;      /* LOGO 的高度 */
-            border-radius: 50%; /* 將 JPG 方形強制裁切成完美的圓形 */
-            object-fit: cover;  /* 確保圖片比例正常不變形 */
-            border: 3px solid rgba(0, 255, 204, 0.6); /* 加上與左下角 UI 搭配的青色光環邊框 */
-            
-            /* 啟動動畫：名稱為 slowSpin，轉一圈耗時 4 秒，勻速(linear)，無限循環(infinite) */
-            animation: slowSpin 4s linear infinite; 
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
         }
 
-        /* 定義旋轉的動畫關鍵幀 */
-        @keyframes slowSpin {
-            0%   { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .loading-box {
+            background: rgba(20, 20, 40, 0.85);
+            padding: 30px 50px;
+            border-radius: 15px;
+            border: 2px solid #ff69b4;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.5);
+            text-align: center;
+            width: 60%;
+            max-width: 800px;
         }
-        /* ========================================= */
+
+        .server-title {
+            color: #fff;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            text-shadow: 0 0 10px #ff69b4;
+        }
+
+        .status-text {
+            color: #00ffcc;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        /* 檔案下載進度條 */
+        .progress-container {
+            width: 100%;
+            background-color: #222;
+            border-radius: 10px;
+            border: 1px solid #555;
+            overflow: hidden;
+            height: 25px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff69b4, #ff1493);
+            transition: width 0.2s;
+            box-shadow: 0 0 15px #ff69b4;
+        }
+
+        /* 當前下載檔案名稱 */
+        .file-name {
+            color: #aaa;
+            font-size: 1.1em;
+            height: 25px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 <body>
 
-    <div class="logo-container">
-        <img src="logo.png" alt="Server Logo" class="spinning-logo">
-    </div>
-
     <div class="overlay">
-        <h1>Hanahimeのゲーセン</h1>
-        <h2>正在前往地圖： <span id="map-name" style="color: #ffaa00;">讀取中...</span></h2>
-
-        <div class="info-box">
-            <div id="loading-status" class="status-text">連線中，請稍候...</div>
-            <div id="download-file" class="file-text">準備下載資源...</div>
-            <div id="progress-text" class="progress-text"></div>
+        <img src="logo.png" alt="Server Logo" class="logo" onerror="this.style.display='none'">
+        
+        <div class="loading-box">
+            <h1 class="server-title">⚡ Hanahime 伺服器 ⚡</h1>
+            <div class="status-text" id="status-text">正在連接伺服器...</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="file-name" id="file-name">準備載入遊戲資源...</div>
         </div>
     </div>
 
     <script>
-        // 1. 抓取網址傳來的地圖名稱 (給那些 GMod 沒呼叫 GameDetails 的情況備用)
-        const urlParams = new URLSearchParams(window.location.search);
-        const mapNameParam = urlParams.get('mapname');
-        if (mapNameParam) {
-            document.getElementById('map-name').innerText = mapNameParam;
+        // === 背景圖片輪播設定 ===
+        const backgrounds = [
+            'bg2.png', 'bg3.png', 'bg4.png', 'bg5.png'
+        ];
+        
+        // 1. 預先載入所有圖片，防止切換時出現短暫黑畫面
+        backgrounds.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+
+        let currentBgIndex = -1;
+
+        // 2. 隨機切換背景的函數 (防呆：確保不會連續抽到同一張圖)
+        function changeBackground() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * backgrounds.length);
+            } while (newIndex === currentBgIndex && backgrounds.length > 1);
+            
+            currentBgIndex = newIndex;
+            document.body.style.backgroundImage = `url('${backgrounds[currentBgIndex]}')`;
         }
 
-        // --- 以下為 GMod 引擎會自動呼叫的內建 JavaScript 函式 ---
+        // 3. 初始載入第一張
+        changeBackground();
 
-        let filesTotal = 0;
-        let filesNeeded = 0;
+        // 4. 每隔 6 秒 (6000 毫秒) 自動執行一次切換
+        setInterval(changeBackground, 6000);
 
-        // 取得伺服器詳細資訊
-        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
-            document.getElementById('map-name').innerText = mapname;
-        }
 
-        // 狀態改變 (例如：Sending client info, Retrieving server info)
+        // === GMod 讀取畫面專用函數 ===
+        
+        // 更新總進度與狀態文字
         function SetStatusChanged(status) {
-            document.getElementById('loading-status').innerText = status;
+            document.getElementById('status-text').innerText = status;
         }
 
         // 正在下載的檔案名稱
         function DownloadingFile(fileName) {
-            document.getElementById('download-file').innerText = "下載檔案: " + fileName;
+            document.getElementById('file-name').innerText = "正在下載: " + fileName;
         }
 
-        // 設定總共需要下載的檔案數量
-        function SetFilesTotal(total) {
-            filesTotal = total;
-        }
-
-        // 設定目前剩餘需要下載的檔案數量，並計算進度
+        // 更新進度條 (GMod 傳入的是下載的檔案數量與總數)
         function SetFilesNeeded(needed) {
-            filesNeeded = needed;
-            if (filesTotal > 0) {
-                let downloaded = filesTotal - filesNeeded;
-                let percentage = Math.round((downloaded / filesTotal) * 100);
-                document.getElementById('progress-text').innerText = "總進度: " + percentage + "% (" + downloaded + " / " + filesTotal + ")";
+            // 需要下載的總數
+            window.totalFiles = needed;
+        }
+
+        function SetFilesTotal(total) {
+            if(window.totalFiles > 0) {
+                let downloaded = window.totalFiles - total;
+                let percent = (downloaded / window.totalFiles) * 100;
+                document.getElementById('progress-bar').style.width = percent + "%";
             }
         }
     </script>
-
 </body>
 </html>
