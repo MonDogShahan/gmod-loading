@@ -2,89 +2,33 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>讀取畫面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanahimeのゲーセン</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #111;
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             background-repeat: no-repeat;
-            overflow: hidden;
-            font-family: "微軟正黑體", sans-serif;
+            font-family: "微軟正黑體", "Microsoft JhengHei", Arial, sans-serif;
+            overflow: hidden; color: white;
             
-            /* 保留：背景圖片切換時有平滑淡入淡出效果 */
+            /* 背景圖片切換時的平滑淡入淡出效果 */
             transition: background-image 1.5s ease-in-out;
         }
 
-        /* 透明遮罩，用來排版頂部和底部資訊 */
         .overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.3); /* 調亮透明度，更突出背景 */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; /* 頂部放標題和LOGO，底部放資訊框 */
-            padding: 30px;
-            box-sizing: border-box;
+            width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 50px 80px; box-sizing: border-box;
         }
 
-        /* 頂部排版 (標題左，Logo右) */
-        .header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start; /* === 修正：改回靠上對齊，這樣標題就不會被大 LOGO 拉低 === */
-        }
+        /* 標題陰影改為粉紅色 */
+        h1 { font-size: 3.5em; margin: 0 0 5px 0; text-shadow: 0 0 15px #ff69b4, 2px 2px 5px rgba(0,0,0,0.9); letter-spacing: 2px; }
+        h2 { font-size: 1.5em; font-weight: normal; margin: 0 0 25px 0; color: #ddd; text-shadow: 1px 1px 3px rgba(0,0,0,0.9); }
 
-        /* 標題裝上粉紅色發光外框 */
-        .server-title {
-            color: #fff;
-            font-size: 2.2em; /* 稍微放大字體配合外框 */
-            font-weight: bold;
-            margin: 0;
-            text-shadow: 0 0 10px #ff69b4;
-            
-            /* 粉紅色外框樣式 */
-            background: rgba(20, 20, 40, 0.85); /* 稍微帶深藍的黑色背景 */
-            padding: 15px 30px; /* 框內間距 */
-            border-radius: 12px; /* 圓角 */
-            border: 2px solid #ff69b4; /* 粉紅色實線邊框 */
-            box-shadow: 0 0 20px rgba(255, 105, 180, 0.6); /* 外發光效果 */
-            
-            display: inline-block; /* 讓框的大小隨內容縮放 */
-            max-width: 60%; /* 限制標題外框寬度 */
-            word-wrap: break-word; /* 內容太長自動換行 */
-            flex-shrink: 0; /* 防止被擠壓 */
-        }
-
-        /* Logo 調整大小中間值 (300px) 並加回縮放效果 */
-        .logo {
-            max-width: 250px;
-            margin: 0;
-            object-fit: contain;
-            flex-shrink: 0; /* 防止被擠壓 */
-            border-radius: 8px;
-            
-            /* 加回縮放動畫效果 */
-            animation: pulse 2s infinite alternate;
-        }
-
-        /* Logo 縮放動畫定義 */
-        @keyframes pulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.6)); }
-            100% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.8)); }
-        }
-
-        /* 底部排版 (靠左下) */
-        .footer-bar {
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-end;
-        }
-
-        /* 保留：你提供的左下角半透明資訊框樣式 (左側綠色邊框) */
         .info-box {
             background: rgba(0, 0, 0, 0.7);
             padding: 20px 30px;
@@ -94,50 +38,57 @@
             gap: 8px;
             max-width: 600px;
             box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            margin: 0;
         }
 
-        /* 資訊框內文字樣式 */
-        .status-text {
-            color: white;
-            font-size: 1.2em;
-            font-weight: bold;
+        .status-text { color: #00ffcc; font-size: 1.3em; font-weight: bold; }
+        .file-text { color: #ffaa00; font-size: 1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .progress-text { color: #fff; font-size: 1.1em; }
+
+        /* 右上角 LOGO 樣式 (改為 250px 呼吸縮放，移除圓形裁切與旋轉) */
+        .logo-container {
+            position: fixed;   
+            top: 40px;         
+            right: 50px;       
+            z-index: 9999;     
         }
-        .file-text {
-            color: #00ffcc;
-            font-size: 1.1em;
+
+        .breathing-logo {
+            max-width: 250px;   /* LOGO 的寬度 */
+            border-radius: 8px; 
+            object-fit: contain;  
+            animation: pulse 2s infinite alternate; 
         }
-        .progress-text {
-            color: #aaa;
-            font-size: 1em;
+
+        /* 定義呼吸縮放的動畫關鍵幀 */
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.6)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.8)); }
         }
     </style>
 </head>
 <body>
 
+    <div class="logo-container">
+        <img src="logo.png" alt="Server Logo" class="breathing-logo" onerror="this.style.display='none'">
+    </div>
+
     <div class="overlay">
-        <div class="header-bar">
-            <h1 class="server-title">Hanahimeのゲーセン</h1>
-            
-            <img src="logo.png" alt="Server Logo" class="logo" onerror="this.style.display='none'">
-        </div>
-        
-        <div class="footer-bar">
-            <div class="info-box">
-                <div id="loading-status" class="status-text">連線中，請稍候...</div>
-                <div id="download-file" class="file-text">準備下載資源...</div>
-                <div id="progress-text" class="progress-text"></div>
-            </div>
+        <h1>Hanahimeのゲーセン</h1>
+        <h2>正在前往地圖： <span id="map-name" style="color: #ffaa00;">讀取中...</span></h2>
+
+        <div class="info-box">
+            <div id="loading-status" class="status-text">連線中，請稍候...</div>
+            <div id="download-file" class="file-text">準備下載資源...</div>
+            <div id="progress-text" class="progress-text"></div>
         </div>
     </div>
 
     <script>
         // === 背景圖片輪播設定 ===
         const backgrounds = [
-            'bg2.png', 'bg3.png', 'bg4.png', 'bg5.png'
+            'bg1.png', 'bg2.png', 'bg3.png', 'bg4.png', 'bg5.png'
         ];
         
-        // 1. 預先載入所有圖片
         backgrounds.forEach(src => {
             const img = new Image();
             img.src = src;
@@ -145,7 +96,6 @@
 
         let currentBgIndex = -1;
 
-        // 2. 隨機切換背景的函數
         function changeBackground() {
             let newIndex;
             do {
@@ -156,40 +106,46 @@
             document.body.style.backgroundImage = `url('${backgrounds[currentBgIndex]}')`;
         }
 
-        // 3. 初始載入第一張
         changeBackground();
-
-        // 4. 每隔 6 秒 自動切換一張
         setInterval(changeBackground, 5000);
 
 
-        // === GMod 讀取畫面專用函數 ===
-        
+        // --- 以下為 GMod 引擎會自動呼叫的內建 JavaScript 函式 ---
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const mapNameParam = urlParams.get('mapname');
+        if (mapNameParam) {
+            document.getElementById('map-name').innerText = mapNameParam;
+        }
+
+        let filesTotal = 0;
+        let filesNeeded = 0;
+
+        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+            document.getElementById('map-name').innerText = mapname;
+        }
+
         function SetStatusChanged(status) {
             document.getElementById('loading-status').innerText = status;
         }
 
         function DownloadingFile(fileName) {
-            document.getElementById('download-file').innerText = "正在下載: " + fileName;
-        }
-
-        function SetFilesNeeded(needed) {
-            window.totalFilesInitial = needed;
-            updateProgressText(window.filesDownloaded || 0, window.totalFilesInitial);
+            document.getElementById('download-file').innerText = "下載檔案: " + fileName;
         }
 
         function SetFilesTotal(total) {
-            if(window.totalFilesInitial > 0) {
-                window.filesDownloaded = window.totalFilesInitial - total; 
-                updateProgressText(window.filesDownloaded, window.totalFilesInitial);
-            }
+            filesTotal = total;
         }
 
-        function updateProgressText(downloaded, total) {
-            if(total > 0) {
-                document.getElementById('progress-text').innerText = "已下載: " + downloaded + " / " + total + " 檔案";
+        function SetFilesNeeded(needed) {
+            filesNeeded = needed;
+            if (filesTotal > 0) {
+                let downloaded = filesTotal - filesNeeded;
+                let percentage = Math.round((downloaded / filesTotal) * 100);
+                document.getElementById('progress-text').innerText = "總進度: " + percentage + "% (" + downloaded + " / " + filesTotal + ")";
             }
         }
     </script>
+
 </body>
 </html>
