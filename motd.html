@@ -153,11 +153,15 @@
             
             <div class="keybind">
                 <div class="key">E</div>
-                <div class="key-desc">對準物品按下可變身。每回合 <span class="danger">限制變身 2 次</span>。</div>
+                <div class="key-desc">對準物品按下可變身。</div>
             </div>
             <div class="keybind">
-                <div class="key">右鍵</div>
-                <div class="key-desc"><strong>鎖定視角：</strong> 將物品角度與位置固定，讓你自由轉動視角觀察四周而不穿幫。</div>
+                <div class="key">N</div>
+                <div class="key-desc"><strong>視角鎖定：</strong> 將物品真實角度固定，你可以自由轉動滑鼠環顧四周而不穿幫。</div>
+            </div>
+            <div class="keybind">
+                <div class="key">R</div>
+                <div class="key-desc"><strong>原地旋轉：</strong> 將物品原地自動旋轉 90 度。</div>
             </div>
             <div class="keybind">
                 <div class="key">B</div>
@@ -165,15 +169,7 @@
             </div>
             <div class="keybind">
                 <div class="key">V</div>
-                <div class="key-desc"><strong>完美貼牆：</strong> 對準牆壁按下，物品會自動完美吸附並貼齊牆面 (需消耗轉身次數，變身可重置)。</div>
-            </div>
-            <div class="keybind">
-                <div class="key">N</div>
-                <div class="key-desc"><strong>卡住復原：</strong> 貼牆後如果卡住，按下 N 可安全彈回貼牆前的位置。每回合 <span class="danger">限用 2 次</span> (變身可重置)。</div>
-            </div>
-            <div class="keybind">
-                <div class="key">R</div>
-                <div class="key-desc"><strong>原地旋轉：</strong> 自動鎖定並將物品原地旋轉 90 度。</div>
+                <div class="key-desc"><strong>完美貼牆：</strong> (需先開啟 B 鍵預覽) 對準牆壁按下，物品會自動完美吸附並貼齊牆面。</div>
             </div>
             <div class="keybind">
                 <div class="key" style="background: #20b2aa; box-shadow: 0 4px 0 #008080;">Shift</div>
@@ -181,16 +177,17 @@
             </div>
             <div class="keybind">
                 <div class="key" style="background: #9b59b6; box-shadow: 0 4px 0 #732d91;">M</div>
-                <div class="key-desc"><strong>直播防窺模式：</strong> 開啟後將隱藏所有地圖場景，只顯示玩家實體，有效防止觀眾窺屏作弊。</div>
+                <div class="key-desc"><strong>直播防窺模式：</strong> 開啟後將隱藏所有地圖場景與其他隊友，只顯示獵人實體與自己的物品，有效防止觀眾窺屏作弊。</div>
             </div>
             <div class="keybind">
                 <div class="key" style="background: #fca311; box-shadow: 0 4px 0 #cc8400; color: black;">C</div>
                 <div class="key-desc">
                     <strong>開啟/關閉 技能選單：</strong> 開啟後不影響滑鼠操作，直接按下鍵盤上方數字鍵施放消耗型技能：
                     <ul>
-                        <li><strong>[1] 防護煙霧彈：</strong> 原地釋放煙霧，自身無敵 1 秒。</li>
+                        <li><strong>[1] 防護煙霧彈：</strong> 原地釋放煙霧，干擾獵人視線。</li>
                         <li><strong>[2] 智慧閃光彈：</strong> 延遲 2 秒爆炸，致盲所有直視該區域的獵人。</li>
-                        <li><strong>[3] 替身誘餌：</strong> 原地留下假本體並隱身 2 秒。獵人若打爆誘餌會被炸傷並致盲。</li>
+                        <li><strong>[3] 替身誘餌：</strong> 原地留下假本體並隱身 2 秒。獵人若打爆誘餌會被致盲。</li>
+                        <li><strong>[4] 嘲諷巴掌：</strong> 靠近獵人會自動集氣，消耗層數可強制將獵人擊飛並播放清脆巴掌聲 (集滿 10 層可觸發大招：終極 5 連擊)。</li>
                     </ul>
                 </div>
             </div>
@@ -199,8 +196,8 @@
         <div class="section">
             <div class="section-title hunter-title">獵人 (Hunters) 專屬技能</div>
             <p style="color: #ddd; margin-top: 0; margin-bottom: 15px;">
-                <span class="highlight">被動機制：</span> 每存活 <strong>60 秒</strong>可自動獲得 1 點技能點數 (上限 20 點)。<br>
-                <span class="danger">警告：</span> 亂開槍打錯物品會扣血，血量歸零將會死亡！
+                <span class="highlight">被動機制：</span> 遊戲開始後每存活 <strong>20 秒</strong>可自動獲得 1 點技能點數 (上限 20 點)。<br>
+                <span class="danger">警告：</span> 亂開槍打錯物品會扣血，血量歸零將會因愧疚而自殺！
             </p>
             
             <div class="keybind">
@@ -208,10 +205,10 @@
                 <div class="key-desc">
                     <strong>開啟/關閉 技能選單：</strong> 開啟後按下鍵盤上方數字鍵施放強大技能：
                     <ul>
-                        <li><strong>[1] 定身震撼波 (消耗 2 點)：</strong> 大範圍爆發，周圍偽裝者將被強制限制移動 2 秒。</li>
+                        <li><strong>[1] 定身震撼波 (消耗 2 點)：</strong> 大範圍爆發，周圍偽裝者將被強制定身限制移動 2 秒。</li>
                         <li><strong>[2] 心跳探測雷達 (消耗 3 點)：</strong> 10 秒內偵測附近偽裝者，距離越近心跳聲越快。</li>
                         <li><strong>[3] 狂暴掃射模式 (消耗 4 點)：</strong> 5 秒內進入狂暴紅光狀態，期間內開槍打錯任何物品皆不扣血。</li>
-                        <li><strong>[4] 鷹眼全圖掃描 (消耗 5 點)：</strong> 啟動後全圖廣播警告，並強制透視標示所有存活的偽裝者 3 秒。</li>
+                        <li><strong>[4] 鷹眼全圖掃描 (消耗 5 點)：</strong> 啟動後全圖廣播警告，並強制全圖暴露所有存活偽裝者的位置 3 秒。</li>
                     </ul>
                 </div>
             </div>
@@ -220,32 +217,16 @@
         <div class="section" style="background: #2a1b3d;">
             <div class="section-title" style="color: #fca311; border-color: #fca311;">伺服器特殊事件</div>
             <ul>
-                <li><span class="highlight">跨時空猜拳：</span> 回合剩餘約 200 秒時，系統將隨機抽一名獵人與偽裝者進行猜拳對決！勝者獲得技能強化與時間獎勵，敗方陣營將面臨「全體強制隨機變身」等嚴厲懲罰！若逾時未出拳將直接判定棄權受罰。</li>
-                <li><span class="highlight">最後 60 秒大暴走：</span> 回合剩下最後 60 秒時，場上所有活著的偽裝者將被系統 <span class="danger">強制隨機變身</span>，趕快逃命吧！</li>
+                <li><span class="highlight">跨時空猜拳：</span> 回合剩餘約 200 秒時，系統將隨機抽一名獵人與偽裝者進行猜拳對決！勝出陣營將獲得強大獎勵(如鷹眼、煙霧與誘餌)，逾時棄權或戰敗陣營將遭受懲罰暴露位置！</li>
+                <li><span class="highlight">最後 60 秒大暴走：</span> 回合剩下最後約 60 秒時系統將倒數，倒數結束後場上所有活著的偽裝者將被系統 <span class="danger">強制隨機變身</span>，趕快逃命吧！</li>
             </ul>
         </div>
     </div>
-    <div id="murder" class="tab-content">
-        <div class="section">
-            <div class="section-title hunter-title">殺手 (Murderer)</div>
-            <p style="color: #ddd; margin-top: 0;">你的目標是神不知鬼不覺地殺死所有人。你開局擁有一把可以秒殺目標的小刀。</p>
-            <div class="keybind">
-                <div class="key" style="background: #ff4a4a; box-shadow: 0 4px 0 #cc0000;">左鍵</div>
-                <div class="key-desc">揮刀攻擊 (可一刀致命)。</div>
-            </div>
-            <div class="keybind">
-                <div class="key" style="background: #ff4a4a; box-shadow: 0 4px 0 #cc0000;">右鍵</div>
-                <div class="key-desc">丟出飛刀 (遠距離暗殺，丟出後須去撿回或等待冷卻重新生成)。</div>
-            </div>
-            <div class="keybind">
-                <div class="key" style="background: #ff4a4a; box-shadow: 0 4px 0 #cc0000;">Shift</div>
-                <div class="key-desc">按住可進行衝刺，方便追擊或逃跑 (注意畫面下方的體力值消耗)。</div>
-            </div>
-        </div>
 
+    <div id="murder" class="tab-content">
         <div class="section" style="background: #1a4a38;">
             <div class="section-title weapon-title">持槍平民 (Secret Weapon)</div>
-            <p style="color: #ddd; margin-top: 0;">開局時你隱藏著一把左輪手槍，你的任務是找出殺手並保護其他人。</p>
+            <p style="color: #ddd; margin-top: 0;">開局時你隱藏著一把左輪手槍，你的任務是找出隱藏在人群中的殺手並保護其他人。</p>
             <div class="keybind">
                 <div class="key" style="background: #20b2aa; box-shadow: 0 4px 0 #008080;">左鍵</div>
                 <div class="key-desc">
@@ -262,20 +243,25 @@
                 <div class="key" style="background: #4682b4; box-shadow: 0 4px 0 #315f86;">E</div>
                 <div class="key-desc">
                     對準地圖上的 <span class="highlight">綠色發光物品 (線索)</span> 按下 E 收集。<br>
-                    收集滿 <strong>5 個</strong> 後，你將會獲得一把左輪手槍，可以反擊殺手！
+                    收集滿 <strong>5 個</strong> 後，你將會獲得一把左輪手槍，可以反擊隱藏在暗處的威脅！
                 </div>
+            </div>
+            <div class="keybind">
+                <div class="key" style="background: #e94560; box-shadow: 0 4px 0 #b33045;">Shift</div>
+                <div class="key-desc">按住可進行衝刺逃跑 (注意畫面下方的體力值消耗)。</div>
             </div>
         </div>
 
         <div class="section" style="background: #3d2a3d;">
             <div class="section-title" style="color: #fca311; border-color: #fca311;">重要遊戲機制</div>
             <ul>
-                <li><span class="highlight">腳印系統：</span> 殺手在移動或殺人後會留下螢光腳印。如果你身上有槍，你可以看見這些腳印來追蹤殺手的去向。</li>
+                <li><span class="highlight">腳印系統：</span> 帶有殺意的人在移動後可能會留下螢光腳印。如果你身上有槍，你可以看見這些腳印來追蹤潛在的威脅。</li>
                 <li><span class="highlight">隨機身分：</span> 為了防止作弊，每回合所有玩家的名字與衣服顏色都會隨機打亂，不要過度依賴平時的暱稱來認人！</li>
                 <li><span class="highlight">屍體查驗：</span> 看到地上的屍體時，靠近並對著屍體按下 <strong>[E]</strong>，可以查驗死者這回合的假名，藉此釐清誰可能已經遇害。</li>
             </ul>
         </div>
     </div>
+    
     <div style="text-align: center; color: #888; font-size: 0.9em; margin-top: 20px;">
         點擊下方按鈕或按下 ESC 關閉此視窗進入遊戲。
     </div>
