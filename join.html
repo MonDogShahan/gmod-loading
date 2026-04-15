@@ -22,7 +22,7 @@
             font-size: 16px;
             color: #8f98a0;
             margin-bottom: 30px;
-            white-space: pre-line; /* 允許文字換行 */
+            white-space: pre-line;
         }
         .btn {
             display: inline-block;
@@ -46,17 +46,17 @@
 <body>
 
     <h2>伺服器連線準備中...</h2>
-    <p id="status-text">正在偵測 DDNS 的最新真實 IP...</p>
+    <p id="status-text">正在取得連線資訊...</p>
     
     <a href="#" id="manual-btn" class="btn" style="display: none;">🚀 手動連接伺服器</a>
 
     <script>
         window.onload = async function() {
-            // 你的伺服器設定
+            // 伺服器設定
             const domain = "hananekohime.ddns.net";
             const port = "6666";
             const password = "hana1236";
-            let targetAddress = domain; // 預設值，若解析失敗則使用原網域
+            let targetAddress = domain; 
 
             try {
                 // 透過 Google DNS API 即時解析 No-IP 網域取得當下真實 IP
@@ -66,13 +66,15 @@
                 // 確定有抓到解析結果 (A 紀錄)
                 if (data.Answer && data.Answer.length > 0) {
                     targetAddress = data.Answer[0].data;
-                    document.getElementById("status-text").innerText = `已成功轉換真實 IP：${targetAddress}\n正在啟動 GMOD 並輸入密碼連線...`;
+                    // 解析成功，僅顯示啟動提示，隱藏 IP
+                    document.getElementById("status-text").innerText = `正在啟動 GMOD 並輸入密碼連線...`;
                 } else {
                     throw new Error("找不到 IP 紀錄");
                 }
             } catch (error) {
                 console.error("IP 解析失敗", error);
-                document.getElementById("status-text").innerText = `無法偵測真實 IP，將使用備用網域模式...\n正在啟動 GMOD 並輸入密碼連線...`;
+                // 解析失敗，依然顯示啟動提示
+                document.getElementById("status-text").innerText = `正在啟動 GMOD 並輸入密碼連線...`;
             }
 
             // 組合最終的 Steam 連線指令 (IP:Port/Password)
@@ -83,7 +85,7 @@
             btn.href = connectUrl;
             btn.style.display = "inline-block";
 
-            // 稍微延遲 0.8 秒，讓玩家能看清楚畫面上的 IP 資訊，然後自動執行導向
+            // 稍微延遲 0.8 秒後自動執行導向
             setTimeout(function() {
                 window.location.href = connectUrl;
             }, 800);
